@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Money Transfered{% endblock title %}
+{% block content %}
+<main id="main">
+    <section class="breadcrumbs">
+        <div class="container">
+            <div class="d-flex justify-content-between align-items-center">
+            <h4>Transaction Details</h4>
+            <ol>
+                <li><a href="{% url 'home' %}">Home</a></li>
+                <li>Transaction</li>
+            </ol>
+            </div>
+        </div>
+    </section>
+    <br>
+    <div class='container'>
+    {% if status %}
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <strong>Transaction Succesful!</strong> Amount of  <strong>{{credit}}</strong> have been sent to <strong> {{recipient}}</strong> from <strong>{{name}}</strong>
+    {% else %}
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <strong>Error:</strong> Cannot send {{credit}} money as {{name}} doesn't have sufficient amount to send
+    {% endif %}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        <div class="app-table">
+        <table class='table table-striped table-hover'>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Designation</th>
+                    <th>Email</th>
+                    <th>Amount Credited</th>
+                    <th>Amount Debited</th>
+                    <th>Balance</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for u in users %}
+            {% ifequal recipient u.name %}
+                <tr>
+                    <td>{{u.name}}</td>
+                    <td>{{"Reciever"}}</td>
+                    <td>{{u.email}}</td>
+                    <td>{{credit}}</td>
+                    <td>{{0}}</td>
+                    <td>{{u.current_credit}}</td>
+                </tr>
+            {% endifequal %}
+            {% ifequal name u.name %}
+                <tr>
+                    <td>{{u.name}}</td>
+                    <td>{{"Sender"}}</td>
+                    <td>{{u.email}}</td>
+                    <td>{{0}}</td>
+                    <td>{{credit}}</td>
+                    <td>{{u.current_credit}}</td>
+                    
+                </tr>
+            {%endifequal%}
+            {% endfor %}
+            </tbody>
+        </table>
+        </div>
+    </div>
+    <br><br>
+    <div class='container'>
+        <div class="app-table">
+        <table class='table table-striped table-hover'>
+        <span><h3>Customer list after transfer</h3></span>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Current Balance</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for user in users %}
+                <tr>
+                    <td>{{user.name}}</td>
+                    <td>{{user.email}}</td>
+                    <td>{{user.current_credit}}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        </div>
+    </div>
+</main>
+{% endblock %}
+
